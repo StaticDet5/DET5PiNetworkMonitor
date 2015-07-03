@@ -1,0 +1,8 @@
+(lp1
+S'e4:8b:7f:ac:bc:20'
+p2
+aS'3c:bd:d8:5d:d8:5b'
+p3
+aS'90:b6:86:ae:6c:42'
+p4
+a.

@@ -1,0 +1,9 @@
+This is a python command line tool to probe and discover MAC's, IP's, and
+hostnames on your network.  The program "learns" over time, trying to remember
+the systems that it has encountered before.  You can run an additional
+program checkfile.py to then give the systems an easy to remember name.
+
+Eventually I would like this program to monitor my network for the comings and
+goings of portable electronics, assisting in the identification of people
+within my house and surrounding property.
+

@@ -10,12 +10,20 @@ fileKnown = 'MACKnown.txt'
 fileSeen = 'MACSeen.txt'
 fileAbnormal = 'MACAbnormal.txt'
 
-subnetping = os.popen('nmap -sP 192.168.1.0/24')
+subnetping = os.popen('nmap -PR 192.168.1.0/24')
 #print subnetping
-known = pickle.load(open(fileKnown, "rb"))
-seen = pickle.load(open(fileSeen, "rb"))
-abnormal = pickle.load(open(fileAbnormal, "rb"))
-
+try:
+	known = pickle.load(open(fileKnown, "ab+"))
+except:
+	known = open(fileKnown, "ab+")
+try:
+	seen = pickle.load(open(fileSeen, "ab+"))
+except:
+	seen = open(fileSeen, "ab+")
+try:
+	abnormal = pickle.load(open(fileAbnormal, "ab+"))
+except:
+	abnormal = open(fileSeen, "ab+")
 
 allDevices = []
 device = {}
@@ -26,15 +34,15 @@ issues = 0
 unknownMACs = []
 
 ar = os.popen('arp -a -v')
-time.sleep(.25)
+time.sleep(1)
 for line in ar.readlines():
     #print line
     item = line.split()
     if item[3] in known:
-        print 'I know MAC ', item[3], ' is ', known[item[3]]
+        print 'I know MAC ', item[3], ' is ', known[item[3]], ' with an IP address of ', item[1]
         knownCount = knownCount+1
     elif item[3] in seen:
-        print 'I have seen ', item[3], ' but I do not have more info.  IP=', item[1], " it idenbtifies as: ", item[0]
+        print 'I have seen ', item[3], ' but I do not have more info.  IP=', item[1], " it identifies as: ", item[0]
         unknownCount = unknownCount+1
         unknownMACs.append(item[3])
     elif item[3] in abnormal:
@@ -49,15 +57,21 @@ for line in ar.readlines():
 print "------------------------------------------------------"
 print " "
 print "There are ", knownCount, " recognized systems."
-print "There are ", unknownCount, " systems that I have seen before, but cannot name."
+print "There are ", unknownCount, " systems that I have seen before, but have not been given names."
 print "There are ", newCount, " systems that I have not seen before."
 print "And there are ", issues, "systems with issues."
 
-seen = unknownMACs
+#pickle.dump(unknownMACs,fileSeen)
+#seen.write(unknownMACs)
+#fileSeen.close()
+#print "Seen pickled and closed"
 
-pickle.dump(known, open(fileKnown, "wb"))
-pickle.dump(seen, open(fileSeen, "wb"))
-pickle.dump(abnormal, open(fileAbnormal,"wb"))
+
+
+#pickle.dump(known, open(fileKnown, "wb"))
+#print seen
+pickle.dump(unknownMACs, open(fileSeen, "wb"))
+#pickle.dump(abnormal, open(fileAbnormal,"wb"))
 
 finish = time.time()
 elapsed = finish - start

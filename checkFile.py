@@ -10,8 +10,16 @@ fileKnown = 'MACKnown.txt'
 newSeen = 'NewMACSeen.txt'
 newKnown = {}
 name = ""
-seen = list(pickle.load(open(fileSeen, "rb")))
-known = pickle.load(open(fileKnown, "rb"))
+try:
+	seen = list(pickle.load(open(fileSeen, "ab+")))
+except:
+	print "New Seen File!"
+	seen = open(fileSeen, "ab+")
+try:
+	known = pickle.load(open(fileKnown, "ab+"))
+except:
+	print "New Known File!"
+	known = open(fileKnown, "ab+")
 
 print "Valid names are at least 5 characters, without spaces"
 print " "
@@ -31,13 +39,19 @@ confirmation.lower()
 if confirmation == "y":
 	confirmation = "yes"
 if confirmation == "yes":
-	known.update(newKnown)
+	print type(known)
+	newKnown = pickle.dumps(newKnown)
+	try:
+		known.write(newKnown)
+	except:
+		known = pickle.dumps(newKnown)
+		
 else:
 	print "Changes discarded"
 print "-------------------------------------"
 
-pickle.dump(known, open(fileKnown, "wb"))
-pickle.dump(seen, open(fileSeen, "wb"))
+#known.close()
+
 
 
 finish = time.time()
